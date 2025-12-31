@@ -65,10 +65,30 @@
             gap: 10px;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .current-list-name {
             font-size: 18px;
             color: #666;
             font-weight: 500;
+        }
+
+        .dark-mode-toggle {
+            background: none;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .dark-mode-toggle:hover {
+            border-color: #007AFF;
         }
 
         .header-buttons {
@@ -227,6 +247,233 @@
             color: white;
         }
 
+        /* Quick Lists Sidebar */
+        .quick-lists {
+            margin-top: 30px;
+            border-top: 2px solid #e9ecef;
+            padding-top: 20px;
+        }
+
+        .quick-lists-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .quick-lists-header:hover {
+            background-color: #f8f9fa;
+        }
+
+        .quick-lists-title {
+            font-weight: 600;
+            color: #495057;
+            font-size: 16px;
+        }
+
+        .toggle-icon {
+            font-size: 12px;
+            color: #6c757d;
+            transition: transform 0.2s;
+        }
+
+        .toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .quick-lists-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .quick-lists-container.collapsed {
+            max-height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .quick-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .quick-list-item:hover {
+            background: #e9ecef;
+            border-color: #007AFF;
+        }
+
+        .quick-list-item.active {
+            background: #e3f2fd;
+            border-color: #007AFF;
+            color: #007AFF;
+        }
+
+        .quick-list-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .quick-list-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .quick-list-stats {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+
+        .quick-delete-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 3px;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .quick-delete-btn:hover {
+            opacity: 1;
+            background: #f8d7da;
+        }
+
+        .new-list-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            background: #e8f5e8;
+            border: 1px dashed #28a745;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .new-list-btn:hover {
+            background: #d4edda;
+        }
+
+        @media (max-width: 480px) {
+            .quick-lists-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .container {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode h1 {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .current-list-name {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode #todoInput,
+        body.dark-mode #dateInput,
+        body.dark-mode .priority-select,
+        body.dark-mode .recurrence-select,
+        body.dark-mode .save-input {
+            background: #3a3a3a;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .date-placeholder {
+            color: #888;
+            background: #3a3a3a;
+        }
+
+        body.dark-mode .todo-item {
+            background: #3a3a3a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .todo-item.completed {
+            background: #2a4a2a;
+        }
+
+        body.dark-mode .todo-item.overdue {
+            background: #4a2a2a;
+        }
+
+        body.dark-mode .todo-item.due-today {
+            background: #4a4a2a;
+        }
+
+        body.dark-mode .modal-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .list-item,
+        body.dark-mode .quick-list-item {
+            background: #3a3a3a;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .list-item:hover,
+        body.dark-mode .quick-list-item:hover {
+            background: #4a4a4a;
+        }
+
+        body.dark-mode .quick-list-item.active {
+            background: #1a3a5a;
+            border-color: #007AFF;
+        }
+
+        body.dark-mode .new-list-btn {
+            background: #2a4a2a;
+            border-color: #28a745;
+        }
+
+        body.dark-mode .new-list-btn:hover {
+            background: #3a5a3a;
+        }
+
+        body.dark-mode .quick-lists-header:hover {
+            background-color: #3a3a3a;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
         .input-section {
             display: flex;
             flex-direction: column;
@@ -240,14 +487,35 @@
             gap: 10px;
         }
 
+        .input-top-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-bottom-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         @media (min-width: 480px) {
             .input-row {
+                flex-direction: row;
+            }
+            
+            .input-top-row {
+                flex-direction: row;
+                flex: 1;
+            }
+            
+            .input-bottom-row {
                 flex-direction: row;
             }
         }
 
         #todoInput {
-            flex: 1;
+            flex: 2;
             padding: 16px 12px;
             border: 2px solid #ddd;
             border-radius: 6px;
@@ -256,6 +524,19 @@
             -webkit-appearance: none;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .priority-select, .recurrence-select {
+            flex: 1;
+            padding: 16px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            -webkit-appearance: none;
+            width: 100%;
+            box-sizing: border-box;
+            background: white;
+            color: #333;
         }
 
         .date-input-wrapper {
@@ -331,7 +612,9 @@
         }
 
         #todoInput:focus,
-        #dateInput:focus {
+        #dateInput:focus,
+        .priority-select:focus,
+        .recurrence-select:focus {
             outline: none;
             border-color: #007AFF;
         }
@@ -385,6 +668,70 @@
         .todo-item.due-today {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
+        }
+
+        /* Priority Styling */
+        .todo-item.priority-high {
+            border-left: 4px solid #dc3545;
+        }
+
+        .todo-item.priority-medium {
+            border-left: 4px solid #ffc107;
+        }
+
+        .todo-item.priority-low {
+            border-left: 4px solid #28a745;
+        }
+
+        .priority-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .priority-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .priority-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .priority-low {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Time Tracking */
+        .time-controls {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .time-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .time-btn.stop {
+            background: #dc3545;
+        }
+
+        .time-display {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+            min-width: 50px;
         }
 
         .todo-item input[type="checkbox"] {
@@ -485,7 +832,10 @@
         <h1>📝 Todo List</h1>
         
         <div class="list-header">
-            <div class="current-list-name" id="currentListName">My Tasks</div>
+            <div class="header-left">
+                <div class="current-list-name" id="currentListName">My Tasks</div>
+                <button class="dark-mode-toggle" id="darkModeToggle">🌙 Dark</button>
+            </div>
             <div class="header-buttons">
                 <button class="header-btn save-btn" id="saveListBtn">Save List</button>
                 <button class="header-btn clear-btn" id="clearAllBtn">Clear All</button>
@@ -495,17 +845,44 @@
         
         <div class="input-section">
             <div class="input-row">
-                <input type="text" id="todoInput" placeholder="Add a new task..." maxlength="100">
-                <div class="date-input-wrapper">
-                    <input type="date" id="dateInput" title="Select deadline (optional)">
-                    <span class="date-placeholder">Select deadline (optional)</span>
+                <div class="input-top-row">
+                    <input type="text" id="todoInput" placeholder="Add a new task..." maxlength="100">
+                    <select id="prioritySelect" class="priority-select">
+                        <option value="">Priority (optional)</option>
+                        <option value="high">🔴 High</option>
+                        <option value="medium">🟡 Medium</option>
+                        <option value="low">🟢 Low</option>
+                    </select>
                 </div>
-                <button id="addBtn">Add</button>
+                <div class="input-bottom-row">
+                    <div class="date-input-wrapper">
+                        <input type="date" id="dateInput" title="Select deadline (optional)">
+                        <span class="date-placeholder">Select deadline (optional)</span>
+                    </div>
+                    <select id="recurrenceSelect" class="recurrence-select">
+                        <option value="">No repeat</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                    <button id="addBtn">Add</button>
+                </div>
             </div>
         </div>
 
         <div id="todoList">
             <div class="empty-state">No tasks yet. Add one above!</div>
+        </div>
+
+        <!-- Quick Lists Section -->
+        <div class="quick-lists" id="quickLists">
+            <div class="quick-lists-header" onclick="app.toggleQuickLists()">
+                <div class="quick-lists-title">My Lists</div>
+                <div class="toggle-icon" id="toggleIcon">▼</div>
+            </div>
+            <div class="quick-lists-container" id="quickListsContainer">
+                <!-- Lists will be populated here -->
+            </div>
         </div>
     </div>
 
@@ -543,19 +920,26 @@
                 this.todos = this.loadTodos();
                 this.savedLists = this.loadSavedLists();
                 this.currentListName = 'My Tasks';
+                this.quickListsCollapsed = false;
+                this.timers = {}; // Track active timers
+                this.darkMode = this.loadDarkMode();
                 
                 this.todoInput = document.getElementById('todoInput');
                 this.dateInput = document.getElementById('dateInput');
+                this.prioritySelect = document.getElementById('prioritySelect');
+                this.recurrenceSelect = document.getElementById('recurrenceSelect');
                 this.addBtn = document.getElementById('addBtn');
                 this.todoList = document.getElementById('todoList');
                 this.currentListNameEl = document.getElementById('currentListName');
+                this.darkModeToggle = document.getElementById('darkModeToggle');
                 
-                // New elements
+                // Existing elements
                 this.saveListBtn = document.getElementById('saveListBtn');
                 this.clearAllBtn = document.getElementById('clearAllBtn');
                 this.viewListsBtn = document.getElementById('viewListsBtn');
                 this.saveModal = document.getElementById('saveModal');
                 this.listsModal = document.getElementById('listsModal');
+                this.quickListsContainer = document.getElementById('quickListsContainer');
                 
                 this.init();
             }
@@ -576,11 +960,18 @@
                 this.dateInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') this.addTodo();
                 });
+                this.prioritySelect.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.addTodo();
+                });
+                this.recurrenceSelect.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.addTodo();
+                });
 
                 // New event listeners
                 this.saveListBtn.addEventListener('click', () => this.showSaveModal());
                 this.clearAllBtn.addEventListener('click', () => this.clearAllTasks());
                 this.viewListsBtn.addEventListener('click', () => this.showListsModal());
+                this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
 
                 // Modal event listeners
                 this.setupModalListeners();
@@ -588,7 +979,11 @@
                 // Date input placeholder management
                 this.setupDatePlaceholder();
                 
+                // Apply dark mode if enabled
+                this.applyDarkMode();
+                
                 this.render();
+                this.renderQuickLists();
             }
 
             setupDatePlaceholder() {
@@ -698,6 +1093,7 @@
 
                 this.saveSavedLists();
                 this.hideSaveModal();
+                this.renderQuickLists();
                 alert(`List "${listName}" saved successfully!`);
             }
 
@@ -754,6 +1150,7 @@
                 
                 this.saveTodos();
                 this.hideListsModal();
+                this.renderQuickLists();
                 this.render();
             }
 
@@ -762,6 +1159,7 @@
                     delete this.savedLists[listName];
                     this.saveSavedLists();
                     this.renderSavedLists();
+                    this.renderQuickLists();
                 }
             }
 
@@ -778,7 +1176,204 @@
                 this.currentListName = 'My Tasks';
                 this.currentListNameEl.textContent = 'My Tasks';
                 this.saveTodos();
+                this.renderQuickLists();
                 this.render();
+            }
+
+            // Quick Lists Management
+            toggleQuickLists() {
+                this.quickListsCollapsed = !this.quickListsCollapsed;
+                const container = this.quickListsContainer;
+                const icon = document.getElementById('toggleIcon');
+                
+                if (this.quickListsCollapsed) {
+                    container.classList.add('collapsed');
+                    icon.classList.add('collapsed');
+                } else {
+                    container.classList.remove('collapsed');
+                    icon.classList.remove('collapsed');
+                }
+            }
+
+            renderQuickLists() {
+                const listNames = Object.keys(this.savedLists);
+                
+                if (listNames.length === 0) {
+                    this.quickListsContainer.innerHTML = `
+                        <div class="new-list-btn" onclick="app.createNewList()">
+                            + Create your first list
+                        </div>
+                    `;
+                    return;
+                }
+
+                const listsHtml = listNames.map(listName => {
+                    const list = this.savedLists[listName];
+                    const taskCount = list.todos.length;
+                    const completedCount = list.todos.filter(t => t.completed).length;
+                    const isActive = listName === this.currentListName;
+                    
+                    return `
+                        <div class="quick-list-item ${isActive ? 'active' : ''}" onclick="app.loadList('${listName}')">
+                            <div class="quick-list-info">
+                                <div class="quick-list-name">${this.escapeHtml(listName)}</div>
+                                <div class="quick-list-stats">${taskCount} tasks • ${completedCount} done</div>
+                            </div>
+                            <button class="quick-delete-btn" onclick="event.stopPropagation(); app.deleteList('${listName}')" title="Delete list">×</button>
+                        </div>
+                    `;
+                }).join('');
+
+                const newListBtn = `
+                    <div class="new-list-btn" onclick="app.createNewList()">
+                        + New List
+                    </div>
+                `;
+
+                this.quickListsContainer.innerHTML = listsHtml + newListBtn;
+            }
+
+            quickDeleteList(listName) {
+                this.deleteList(listName);
+            }
+
+            // Dark Mode
+            loadDarkMode() {
+                try {
+                    return localStorage.getItem('darkMode') === 'true';
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            saveDarkMode() {
+                try {
+                    localStorage.setItem('darkMode', this.darkMode.toString());
+                } catch (error) {
+                    console.error('Error saving dark mode:', error);
+                }
+            }
+
+            toggleDarkMode() {
+                this.darkMode = !this.darkMode;
+                this.applyDarkMode();
+                this.saveDarkMode();
+            }
+
+            applyDarkMode() {
+                if (this.darkMode) {
+                    document.body.classList.add('dark-mode');
+                    this.darkModeToggle.textContent = '☀️ Light';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    this.darkModeToggle.textContent = '🌙 Dark';
+                }
+            }
+
+            // Recurring Tasks
+            createRecurringTask(originalTodo) {
+                if (!originalTodo.dueDate) return;
+
+                const newDueDate = new Date(originalTodo.dueDate);
+                
+                switch (originalTodo.recurrence) {
+                    case 'daily':
+                        newDueDate.setDate(newDueDate.getDate() + 1);
+                        break;
+                    case 'weekly':
+                        newDueDate.setDate(newDueDate.getDate() + 7);
+                        break;
+                    case 'monthly':
+                        newDueDate.setMonth(newDueDate.getMonth() + 1);
+                        break;
+                    default:
+                        return;
+                }
+
+                const newTodo = {
+                    id: Date.now() + Math.random(), // Ensure unique ID
+                    text: originalTodo.text,
+                    completed: false,
+                    dueDate: newDueDate.toISOString().split('T')[0],
+                    priority: originalTodo.priority,
+                    recurrence: originalTodo.recurrence,
+                    timeSpent: 0,
+                    isTimerRunning: false,
+                    timerStartTime: null,
+                    createdAt: new Date().toISOString()
+                };
+
+                this.todos.push(newTodo);
+            }
+
+            // Time Tracking
+            startTimer(id) {
+                const todo = this.todos.find(t => t.id === id);
+                if (!todo || todo.completed) return;
+
+                // Stop any other running timers
+                this.todos.forEach(t => {
+                    if (t.isTimerRunning && t.id !== id) {
+                        this.stopTimer(t.id);
+                    }
+                });
+
+                todo.isTimerRunning = true;
+                todo.timerStartTime = Date.now();
+                
+                // Start interval to update display
+                this.timers[id] = setInterval(() => {
+                    this.updateTimerDisplay(id);
+                }, 1000);
+
+                this.saveTodos();
+                this.render();
+            }
+
+            stopTimer(id) {
+                const todo = this.todos.find(t => t.id === id);
+                if (!todo || !todo.isTimerRunning) return;
+
+                // Add elapsed time to total
+                const elapsed = Date.now() - todo.timerStartTime;
+                todo.timeSpent += elapsed;
+                todo.isTimerRunning = false;
+                todo.timerStartTime = null;
+
+                // Clear interval
+                if (this.timers[id]) {
+                    clearInterval(this.timers[id]);
+                    delete this.timers[id];
+                }
+
+                this.saveTodos();
+                this.render();
+            }
+
+            updateTimerDisplay(id) {
+                const todo = this.todos.find(t => t.id === id);
+                if (!todo || !todo.isTimerRunning) return;
+
+                const display = document.querySelector(`[data-timer-id="${id}"]`);
+                if (display) {
+                    const elapsed = Date.now() - todo.timerStartTime;
+                    const totalTime = todo.timeSpent + elapsed;
+                    display.textContent = this.formatTime(totalTime);
+                }
+            }
+
+            formatTime(milliseconds) {
+                const seconds = Math.floor(milliseconds / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+
+                if (hours > 0) {
+                    return `${hours}h ${minutes % 60}m`;
+                } else if (minutes > 0) {
+                    return `${minutes}m ${seconds % 60}s`;
+                } else {
+                    return `${seconds}s`;
+                }
             }
 
             saveTodos() {
@@ -797,12 +1392,20 @@
                     id: Date.now(),
                     text: text,
                     completed: false,
-                    dueDate: this.dateInput.value || null
+                    dueDate: this.dateInput.value || null,
+                    priority: this.prioritySelect.value || null,
+                    recurrence: this.recurrenceSelect.value || null,
+                    timeSpent: 0,
+                    isTimerRunning: false,
+                    timerStartTime: null,
+                    createdAt: new Date().toISOString()
                 };
 
                 this.todos.push(todo);
                 this.todoInput.value = '';
                 this.dateInput.value = '';
+                this.prioritySelect.value = '';
+                this.recurrenceSelect.value = '';
                 this.saveTodos();
                 this.render();
             }
@@ -811,6 +1414,17 @@
                 const todo = this.todos.find(t => t.id === id);
                 if (todo) {
                     todo.completed = !todo.completed;
+                    
+                    // Handle recurring tasks
+                    if (todo.completed && todo.recurrence) {
+                        this.createRecurringTask(todo);
+                    }
+                    
+                    // Stop timer if task is completed
+                    if (todo.completed && todo.isTimerRunning) {
+                        this.stopTimer(id);
+                    }
+                    
                     this.saveTodos();
                     this.render();
                 }
@@ -823,15 +1437,25 @@
             }
 
             render() {
-                // Sort todos: incomplete first (by due date), completed at bottom
+                // Sort todos: incomplete first (by priority, then due date), completed at bottom
                 const sortedTodos = [...this.todos].sort((a, b) => {
                     // Completed items go to bottom
                     if (a.completed !== b.completed) {
                         return a.completed ? 1 : -1;
                     }
                     
-                    // For incomplete items, sort by due date (overdue first, then by date)
+                    // For incomplete items, sort by priority first, then due date
                     if (!a.completed && !b.completed) {
+                        // Priority order: high > medium > low > none
+                        const priorityOrder = { high: 3, medium: 2, low: 1, '': 0, null: 0 };
+                        const aPriority = priorityOrder[a.priority || ''];
+                        const bPriority = priorityOrder[b.priority || ''];
+                        
+                        if (aPriority !== bPriority) {
+                            return bPriority - aPriority; // Higher priority first
+                        }
+                        
+                        // Then sort by due date
                         if (!a.dueDate && !b.dueDate) return 0;
                         if (!a.dueDate) return 1;
                         if (!b.dueDate) return -1;
@@ -849,7 +1473,25 @@
                 this.todoList.innerHTML = sortedTodos.map(todo => {
                     const dateStatus = this.getDateStatus(todo.dueDate);
                     const dateClass = dateStatus.isOverdue ? 'overdue' : (dateStatus.isDueToday ? 'due-today' : '');
-                    const itemClass = `todo-item ${todo.completed ? 'completed' : ''} ${dateClass}`;
+                    const priorityClass = todo.priority ? `priority-${todo.priority}` : '';
+                    const itemClass = `todo-item ${todo.completed ? 'completed' : ''} ${dateClass} ${priorityClass}`;
+                    
+                    const priorityBadge = todo.priority ? `<span class="priority-badge priority-${todo.priority}">${todo.priority.toUpperCase()}</span>` : '';
+                    const recurrenceBadge = todo.recurrence ? `<span class="priority-badge" style="background: #e3f2fd; color: #1976d2;">↻ ${todo.recurrence}</span>` : '';
+                    
+                    const currentTime = todo.isTimerRunning ? 
+                        todo.timeSpent + (Date.now() - todo.timerStartTime) : 
+                        todo.timeSpent;
+                    
+                    const timeControls = todo.completed ? '' : `
+                        <div class="time-controls">
+                            <div class="time-display" data-timer-id="${todo.id}">${this.formatTime(currentTime)}</div>
+                            ${todo.isTimerRunning ? 
+                                `<button class="time-btn stop" onclick="app.stopTimer(${todo.id})">Stop</button>` :
+                                `<button class="time-btn" onclick="app.startTimer(${todo.id})">Start</button>`
+                            }
+                        </div>
+                    `;
                     
                     return `
                         <div class="${itemClass}">
@@ -857,9 +1499,15 @@
                                    ${todo.completed ? 'checked' : ''} 
                                    onchange="app.toggleTodo(${todo.id})">
                             <div class="todo-content">
-                                <span class="todo-text">${this.escapeHtml(todo.text)}</span>
+                                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                                    <span class="todo-text">${this.escapeHtml(todo.text)}</span>
+                                    ${priorityBadge}
+                                    ${recurrenceBadge}
+                                </div>
                                 ${todo.dueDate ? `<span class="todo-date ${dateClass}">Due: ${this.formatDate(todo.dueDate)} ${dateStatus.label}</span>` : ''}
+                                ${currentTime > 0 || todo.isTimerRunning ? `<div style="font-size: 11px; color: #666; margin-top: 2px;">Time: ${this.formatTime(currentTime)}</div>` : ''}
                             </div>
+                            ${timeControls}
                             <button class="delete-btn" onclick="app.deleteTodo(${todo.id})">Delete</button>
                         </div>
                     `;
