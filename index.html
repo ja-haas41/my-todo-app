@@ -499,14 +499,10 @@
             gap: 10px;
         }
 
+        /* Desktop layout - stack in two rows */
         @media (min-width: 480px) {
-            .input-row {
-                flex-direction: row;
-            }
-            
             .input-top-row {
                 flex-direction: row;
-                flex: 1;
             }
             
             .input-bottom-row {
@@ -844,29 +840,27 @@
         </div>
         
         <div class="input-section">
-            <div class="input-row">
-                <div class="input-top-row">
-                    <input type="text" id="todoInput" placeholder="Add a new task..." maxlength="100">
-                    <select id="prioritySelect" class="priority-select">
-                        <option value="">Priority (optional)</option>
-                        <option value="high">🔴 High</option>
-                        <option value="medium">🟡 Medium</option>
-                        <option value="low">🟢 Low</option>
-                    </select>
+            <div class="input-top-row">
+                <input type="text" id="todoInput" placeholder="Add a new task..." maxlength="100">
+                <div class="date-input-wrapper">
+                    <input type="date" id="dateInput" title="Select deadline (optional)">
+                    <span class="date-placeholder">Select deadline (optional)</span>
                 </div>
-                <div class="input-bottom-row">
-                    <div class="date-input-wrapper">
-                        <input type="date" id="dateInput" title="Select deadline (optional)">
-                        <span class="date-placeholder">Select deadline (optional)</span>
-                    </div>
-                    <select id="recurrenceSelect" class="recurrence-select">
-                        <option value="">No repeat</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                    </select>
-                    <button id="addBtn">Add</button>
-                </div>
+            </div>
+            <div class="input-bottom-row">
+                <select id="prioritySelect" class="priority-select">
+                    <option value="">Priority (optional)</option>
+                    <option value="high">🔴 High</option>
+                    <option value="medium">🟡 Medium</option>
+                    <option value="low">🟢 Low</option>
+                </select>
+                <select id="recurrenceSelect" class="recurrence-select">
+                    <option value="">No repeat</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+                <button id="addBtn">Add</button>
             </div>
         </div>
 
@@ -1050,7 +1044,7 @@
             clearAllTasks() {
                 if (this.todos.length === 0) return;
                 
-                if (confirm('Are you sure you want to delete all tasks? This cannot be undone.')) {
+                if (confirm('Are you sure you want to clear all tasks? Consider saving this list first if you might need it later.')) {
                     this.todos = [];
                     this.saveTodos();
                     this.render();
