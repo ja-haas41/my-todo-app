@@ -53,7 +53,178 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .current-list-name {
+            font-size: 18px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .header-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            -webkit-appearance: none;
+            touch-action: manipulation;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #218838;
+        }
+
+        .clear-btn {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .clear-btn:hover {
+            background: #e0a800;
+        }
+
+        .lists-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .lists-btn:hover {
+            background: #5a6268;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .list-item:hover {
+            background: #e9ecef;
+        }
+
+        .list-name {
+            font-weight: 500;
+        }
+
+        .list-count {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .delete-list-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .delete-list-btn:hover {
+            background: #c82333;
+        }
+
+        .save-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #007AFF;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
         }
 
         .input-section {
@@ -75,8 +246,7 @@
             }
         }
 
-        #todoInput,
-        #dateInput {
+        #todoInput {
             flex: 1;
             padding: 16px 12px;
             border: 2px solid #ddd;
@@ -94,10 +264,17 @@
         }
 
         #dateInput {
-            min-width: unset;
+            flex: 1;
+            padding: 16px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            /* Prevent zoom on iOS */
+            -webkit-appearance: none;
+            width: 100%;
+            box-sizing: border-box;
             background: white;
             color: #333;
-            width: 100%;
         }
 
         #dateInput::-webkit-datetime-edit {
@@ -139,10 +316,17 @@
             pointer-events: none;
             font-size: 16px;
             transition: opacity 0.2s;
+            background: white;
+            padding: 0 4px;
         }
 
         #dateInput:focus + .date-placeholder,
-        #dateInput:valid + .date-placeholder {
+        #dateInput:not(:placeholder-shown) + .date-placeholder {
+            opacity: 0;
+        }
+
+        /* Better detection for when date is selected */
+        #dateInput[value]:not([value=""]) + .date-placeholder {
             opacity: 0;
         }
 
@@ -300,6 +484,15 @@
     <div class="container">
         <h1>📝 Todo List</h1>
         
+        <div class="list-header">
+            <div class="current-list-name" id="currentListName">My Tasks</div>
+            <div class="header-buttons">
+                <button class="header-btn save-btn" id="saveListBtn">Save List</button>
+                <button class="header-btn clear-btn" id="clearAllBtn">Clear All</button>
+                <button class="header-btn lists-btn" id="viewListsBtn">My Lists</button>
+            </div>
+        </div>
+        
         <div class="input-section">
             <div class="input-row">
                 <input type="text" id="todoInput" placeholder="Add a new task..." maxlength="100">
@@ -316,14 +509,53 @@
         </div>
     </div>
 
+    <!-- Save List Modal -->
+    <div id="saveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Save Current List</h3>
+                <span class="close" id="closeSaveModal">&times;</span>
+            </div>
+            <input type="text" id="listNameInput" class="save-input" placeholder="Enter list name..." maxlength="50">
+            <div class="modal-buttons">
+                <button class="modal-btn btn-secondary" id="cancelSave">Cancel</button>
+                <button class="modal-btn btn-primary" id="confirmSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Lists Modal -->
+    <div id="listsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>My Saved Lists</h3>
+                <span class="close" id="closeListsModal">&times;</span>
+            </div>
+            <div id="savedListsContainer">
+                <div class="empty-state">No saved lists yet.</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         class TodoApp {
             constructor() {
                 this.todos = this.loadTodos();
+                this.savedLists = this.loadSavedLists();
+                this.currentListName = 'My Tasks';
+                
                 this.todoInput = document.getElementById('todoInput');
                 this.dateInput = document.getElementById('dateInput');
                 this.addBtn = document.getElementById('addBtn');
                 this.todoList = document.getElementById('todoList');
+                this.currentListNameEl = document.getElementById('currentListName');
+                
+                // New elements
+                this.saveListBtn = document.getElementById('saveListBtn');
+                this.clearAllBtn = document.getElementById('clearAllBtn');
+                this.viewListsBtn = document.getElementById('viewListsBtn');
+                this.saveModal = document.getElementById('saveModal');
+                this.listsModal = document.getElementById('listsModal');
                 
                 this.init();
             }
@@ -331,11 +563,12 @@
             init() {
                 // Register service worker
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/sw.js')
+                    navigator.serviceWorker.register('./sw.js')
                         .then(registration => console.log('SW registered'))
                         .catch(error => console.log('SW registration failed'));
                 }
 
+                // Existing event listeners
                 this.addBtn.addEventListener('click', () => this.addTodo());
                 this.todoInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') this.addTodo();
@@ -343,8 +576,51 @@
                 this.dateInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') this.addTodo();
                 });
+
+                // New event listeners
+                this.saveListBtn.addEventListener('click', () => this.showSaveModal());
+                this.clearAllBtn.addEventListener('click', () => this.clearAllTasks());
+                this.viewListsBtn.addEventListener('click', () => this.showListsModal());
+
+                // Modal event listeners
+                this.setupModalListeners();
+
+                // Date input placeholder management
+                this.setupDatePlaceholder();
                 
                 this.render();
+            }
+
+            setupDatePlaceholder() {
+                this.dateInput.addEventListener('input', () => {
+                    const placeholder = document.querySelector('.date-placeholder');
+                    if (this.dateInput.value) {
+                        placeholder.style.opacity = '0';
+                    } else {
+                        placeholder.style.opacity = '1';
+                    }
+                });
+            }
+
+            setupModalListeners() {
+                // Save modal
+                document.getElementById('closeSaveModal').addEventListener('click', () => this.hideSaveModal());
+                document.getElementById('cancelSave').addEventListener('click', () => this.hideSaveModal());
+                document.getElementById('confirmSave').addEventListener('click', () => this.saveCurrentList());
+                
+                // Lists modal
+                document.getElementById('closeListsModal').addEventListener('click', () => this.hideListsModal());
+                
+                // Close modals when clicking outside
+                window.addEventListener('click', (e) => {
+                    if (e.target === this.saveModal) this.hideSaveModal();
+                    if (e.target === this.listsModal) this.hideListsModal();
+                });
+
+                // Enter key in save input
+                document.getElementById('listNameInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.saveCurrentList();
+                });
             }
 
             loadTodos() {
@@ -355,6 +631,154 @@
                     console.error('Error loading todos:', error);
                     return [];
                 }
+            }
+
+            loadSavedLists() {
+                try {
+                    const saved = localStorage.getItem('savedLists');
+                    return saved ? JSON.parse(saved) : {};
+                } catch (error) {
+                    console.error('Error loading saved lists:', error);
+                    return {};
+                }
+            }
+
+            saveSavedLists() {
+                try {
+                    localStorage.setItem('savedLists', JSON.stringify(this.savedLists));
+                } catch (error) {
+                    console.error('Error saving lists:', error);
+                }
+            }
+
+            // Clear all tasks
+            clearAllTasks() {
+                if (this.todos.length === 0) return;
+                
+                if (confirm('Are you sure you want to delete all tasks? This cannot be undone.')) {
+                    this.todos = [];
+                    this.saveTodos();
+                    this.render();
+                }
+            }
+
+            // Save current list
+            showSaveModal() {
+                if (this.todos.length === 0) {
+                    alert('No tasks to save. Add some tasks first!');
+                    return;
+                }
+                
+                document.getElementById('listNameInput').value = '';
+                this.saveModal.style.display = 'block';
+                document.getElementById('listNameInput').focus();
+            }
+
+            hideSaveModal() {
+                this.saveModal.style.display = 'none';
+            }
+
+            saveCurrentList() {
+                const listName = document.getElementById('listNameInput').value.trim();
+                if (!listName) {
+                    alert('Please enter a list name.');
+                    return;
+                }
+
+                if (this.savedLists[listName]) {
+                    if (!confirm(`A list named "${listName}" already exists. Replace it?`)) {
+                        return;
+                    }
+                }
+
+                this.savedLists[listName] = {
+                    todos: [...this.todos],
+                    savedAt: new Date().toISOString()
+                };
+
+                this.saveSavedLists();
+                this.hideSaveModal();
+                alert(`List "${listName}" saved successfully!`);
+            }
+
+            // View and manage saved lists
+            showListsModal() {
+                this.renderSavedLists();
+                this.listsModal.style.display = 'block';
+            }
+
+            hideListsModal() {
+                this.listsModal.style.display = 'none';
+            }
+
+            renderSavedLists() {
+                const container = document.getElementById('savedListsContainer');
+                const listNames = Object.keys(this.savedLists);
+
+                if (listNames.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No saved lists yet.</div>';
+                    return;
+                }
+
+                container.innerHTML = listNames.map(listName => {
+                    const list = this.savedLists[listName];
+                    const taskCount = list.todos.length;
+                    const completedCount = list.todos.filter(t => t.completed).length;
+                    
+                    return `
+                        <div class="list-item" onclick="app.loadList('${listName}')">
+                            <div>
+                                <div class="list-name">${this.escapeHtml(listName)}</div>
+                                <div class="list-count">${taskCount} tasks (${completedCount} completed)</div>
+                            </div>
+                            <button class="delete-list-btn" onclick="event.stopPropagation(); app.deleteList('${listName}')">Delete</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            loadList(listName) {
+                if (!this.savedLists[listName]) return;
+
+                // Ask to save current list if it has unsaved changes
+                if (this.todos.length > 0 && this.currentListName === 'My Tasks') {
+                    if (confirm('Save current tasks before switching lists?')) {
+                        this.showSaveModal();
+                        return;
+                    }
+                }
+
+                this.todos = [...this.savedLists[listName].todos];
+                this.currentListName = listName;
+                this.currentListNameEl.textContent = listName;
+                
+                this.saveTodos();
+                this.hideListsModal();
+                this.render();
+            }
+
+            deleteList(listName) {
+                if (confirm(`Are you sure you want to delete the list "${listName}"? This cannot be undone.`)) {
+                    delete this.savedLists[listName];
+                    this.saveSavedLists();
+                    this.renderSavedLists();
+                }
+            }
+
+            // Create new list (clear current and reset name)
+            createNewList() {
+                if (this.todos.length > 0) {
+                    if (confirm('Save current tasks before creating a new list?')) {
+                        this.showSaveModal();
+                        return;
+                    }
+                }
+
+                this.todos = [];
+                this.currentListName = 'My Tasks';
+                this.currentListNameEl.textContent = 'My Tasks';
+                this.saveTodos();
+                this.render();
             }
 
             saveTodos() {
