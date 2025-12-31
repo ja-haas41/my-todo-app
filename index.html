@@ -485,7 +485,8 @@
         body.dark-mode #editTaskInput,
         body.dark-mode #editDateInput,
         body.dark-mode #editPrioritySelect,
-        body.dark-mode #editRecurrenceSelect {
+        body.dark-mode #editRecurrenceSelect,
+        body.dark-mode .edit-input {
             background: #3a3a3a;
             border-color: #555;
             color: #e0e0e0;
@@ -853,6 +854,79 @@
             gap: 5px;
         }
 
+        /* Edit Modal Styling */
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .edit-row {
+            display: flex;
+            width: 100%;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background: white;
+            color: #333;
+        }
+
+        .edit-row .date-input-wrapper {
+            width: 100%;
+            position: relative;
+        }
+
+        /* Mobile responsive task layout */
+        @media (max-width: 600px) {
+            .todo-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .todo-item input[type="checkbox"] {
+                align-self: flex-start;
+                margin-top: 5px;
+            }
+
+            .todo-content {
+                width: 100%;
+                order: 2;
+            }
+
+            .todo-actions {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                order: 3;
+            }
+
+            .time-controls {
+                flex-shrink: 0;
+            }
+
+            .task-buttons {
+                flex-shrink: 0;
+            }
+
+            .todo-item {
+                padding: 12px;
+            }
+        }
+
+        .todo-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .delete-btn:hover {
             background: #ff3742;
         }
@@ -977,26 +1051,33 @@
                 <h3>Edit Task</h3>
                 <span class="close" id="closeEditModal">&times;</span>
             </div>
-            <div class="input-section">
+            <div class="edit-form">
                 <input type="text" id="editTaskInput" class="save-input" placeholder="Task description..." maxlength="100">
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <div class="date-input-wrapper" style="flex: 1;">
-                        <input type="date" id="editDateInput" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px;">
+                
+                <div class="edit-row">
+                    <div class="date-input-wrapper">
+                        <input type="date" id="editDateInput" class="edit-input">
                         <span class="date-placeholder">Select deadline (optional)</span>
                     </div>
-                    <select id="editPrioritySelect" style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px;">
+                </div>
+                
+                <div class="edit-row">
+                    <select id="editPrioritySelect" class="edit-input">
                         <option value="">Priority (optional)</option>
                         <option value="high">🔴 High</option>
                         <option value="medium">🟡 Medium</option>
                         <option value="low">🟢 Low</option>
                     </select>
                 </div>
-                <select id="editRecurrenceSelect" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; margin-bottom: 15px;">
-                    <option value="">No repeat</option>
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                </select>
+                
+                <div class="edit-row">
+                    <select id="editRecurrenceSelect" class="edit-input">
+                        <option value="">No repeat</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-buttons">
                 <button class="modal-btn btn-secondary" id="cancelEdit">Cancel</button>
@@ -1714,10 +1795,12 @@
                                 ${todo.dueDate ? `<span class="todo-date ${dateClass}">Due: ${this.formatDate(todo.dueDate)} ${dateStatus.label}</span>` : ''}
                                 ${currentTime > 0 || todo.isTimerRunning ? `<div style="font-size: 11px; color: #666; margin-top: 2px;">Time: ${this.formatTime(currentTime)}</div>` : ''}
                             </div>
-                            ${timeControls}
-                            <div class="task-buttons">
-                                <button class="edit-btn" onclick="app.editTask(${todo.id})">Edit</button>
-                                <button class="delete-btn" onclick="app.deleteTodo(${todo.id})">Delete</button>
+                            <div class="todo-actions">
+                                ${timeControls}
+                                <div class="task-buttons">
+                                    <button class="edit-btn" onclick="app.editTask(${todo.id})">Edit</button>
+                                    <button class="delete-btn" onclick="app.deleteTodo(${todo.id})">Delete</button>
+                                </div>
                             </div>
                         </div>
                     `;
