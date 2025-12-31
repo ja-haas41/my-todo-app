@@ -474,6 +474,28 @@
             color: #e0e0e0;
         }
 
+        body.dark-mode .edit-btn {
+            background: #5a6268;
+        }
+
+        body.dark-mode .edit-btn:hover {
+            background: #6c757d;
+        }
+
+        body.dark-mode #editTaskInput,
+        body.dark-mode #editDateInput,
+        body.dark-mode #editPrioritySelect,
+        body.dark-mode #editRecurrenceSelect {
+            background: #3a3a3a;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode #editModal .date-placeholder {
+            color: #888;
+            background: #3a3a3a;
+        }
+
         .input-section {
             display: flex;
             flex-direction: column;
@@ -807,6 +829,30 @@
             align-self: flex-start;
         }
 
+        .edit-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            -webkit-appearance: none;
+            touch-action: manipulation;
+            flex-shrink: 0;
+            align-self: flex-start;
+            margin-right: 5px;
+        }
+
+        .edit-btn:hover {
+            background: #5a6268;
+        }
+
+        .task-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
         .delete-btn:hover {
             background: #ff3742;
         }
@@ -924,6 +970,41 @@
         </div>
     </div>
 
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <span class="close" id="closeEditModal">&times;</span>
+            </div>
+            <div class="input-section">
+                <input type="text" id="editTaskInput" class="save-input" placeholder="Task description..." maxlength="100">
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div class="date-input-wrapper" style="flex: 1;">
+                        <input type="date" id="editDateInput" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px;">
+                        <span class="date-placeholder">Select deadline (optional)</span>
+                    </div>
+                    <select id="editPrioritySelect" style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px;">
+                        <option value="">Priority (optional)</option>
+                        <option value="high">🔴 High</option>
+                        <option value="medium">🟡 Medium</option>
+                        <option value="low">🟢 Low</option>
+                    </select>
+                </div>
+                <select id="editRecurrenceSelect" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; margin-bottom: 15px;">
+                    <option value="">No repeat</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-secondary" id="cancelEdit">Cancel</button>
+                <button class="modal-btn btn-primary" id="confirmEdit">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         class TodoApp {
             constructor() {
@@ -950,6 +1031,7 @@
                 this.saveModal = document.getElementById('saveModal');
                 this.listsModal = document.getElementById('listsModal');
                 this.newListModal = document.getElementById('newListModal');
+                this.editModal = document.getElementById('editModal');
                 this.quickListsContainer = document.getElementById('quickListsContainer');
                 
                 this.init();
@@ -1023,16 +1105,27 @@
                 document.getElementById('createNewWithoutSaving').addEventListener('click', () => this.createNewWithoutSaving());
                 document.getElementById('cancelNewList').addEventListener('click', () => this.hideNewListModal());
                 
+                // Edit modal
+                document.getElementById('closeEditModal').addEventListener('click', () => this.hideEditModal());
+                document.getElementById('cancelEdit').addEventListener('click', () => this.hideEditModal());
+                document.getElementById('confirmEdit').addEventListener('click', () => this.saveEditedTask());
+                
                 // Close modals when clicking outside
                 window.addEventListener('click', (e) => {
                     if (e.target === this.saveModal) this.hideSaveModal();
                     if (e.target === this.listsModal) this.hideListsModal();
                     if (e.target === this.newListModal) this.hideNewListModal();
+                    if (e.target === this.editModal) this.hideEditModal();
                 });
 
                 // Enter key in save input
                 document.getElementById('listNameInput').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') this.saveCurrentList();
+                });
+
+                // Enter key in edit input
+                document.getElementById('editTaskInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.saveEditedTask();
                 });
             }
 
@@ -1235,6 +1328,63 @@
                 
                 // Show confirmation
                 alert('New list created! Start adding tasks above.');
+            }
+
+            // Edit Task Feature
+            editTask(id) {
+                const todo = this.todos.find(t => t.id === id);
+                if (!todo) return;
+
+                // Store the task being edited
+                this.editingTaskId = id;
+
+                // Populate the edit form
+                document.getElementById('editTaskInput').value = todo.text;
+                document.getElementById('editDateInput').value = todo.dueDate || '';
+                document.getElementById('editPrioritySelect').value = todo.priority || '';
+                document.getElementById('editRecurrenceSelect').value = todo.recurrence || '';
+
+                // Update date placeholder visibility
+                const editDatePlaceholder = document.querySelector('#editModal .date-placeholder');
+                if (todo.dueDate) {
+                    editDatePlaceholder.style.opacity = '0';
+                } else {
+                    editDatePlaceholder.style.opacity = '1';
+                }
+
+                // Show the edit modal
+                this.showEditModal();
+            }
+
+            showEditModal() {
+                this.editModal.style.display = 'block';
+                document.getElementById('editTaskInput').focus();
+            }
+
+            hideEditModal() {
+                this.editModal.style.display = 'none';
+                this.editingTaskId = null;
+            }
+
+            saveEditedTask() {
+                const taskText = document.getElementById('editTaskInput').value.trim();
+                if (!taskText) {
+                    alert('Please enter a task description.');
+                    return;
+                }
+
+                const todo = this.todos.find(t => t.id === this.editingTaskId);
+                if (!todo) return;
+
+                // Update the task
+                todo.text = taskText;
+                todo.dueDate = document.getElementById('editDateInput').value || null;
+                todo.priority = document.getElementById('editPrioritySelect').value || null;
+                todo.recurrence = document.getElementById('editRecurrenceSelect').value || null;
+
+                this.saveTodos();
+                this.hideEditModal();
+                this.render();
             }
 
             // Quick Lists Management
@@ -1565,7 +1715,10 @@
                                 ${currentTime > 0 || todo.isTimerRunning ? `<div style="font-size: 11px; color: #666; margin-top: 2px;">Time: ${this.formatTime(currentTime)}</div>` : ''}
                             </div>
                             ${timeControls}
-                            <button class="delete-btn" onclick="app.deleteTodo(${todo.id})">Delete</button>
+                            <div class="task-buttons">
+                                <button class="edit-btn" onclick="app.editTask(${todo.id})">Edit</button>
+                                <button class="delete-btn" onclick="app.deleteTodo(${todo.id})">Delete</button>
+                            </div>
                         </div>
                     `;
                 }).join('');
