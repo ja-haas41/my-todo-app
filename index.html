@@ -908,6 +908,22 @@
         </div>
     </div>
 
+    <!-- New List Options Modal -->
+    <div id="newListModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New List</h3>
+                <span class="close" id="closeNewListModal">&times;</span>
+            </div>
+            <p>You have unsaved tasks. What would you like to do?</p>
+            <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
+                <button class="modal-btn btn-primary" id="saveAndCreateNew">Save Current List & Create New</button>
+                <button class="modal-btn" style="background: #ffc107; color: #212529;" id="createNewWithoutSaving">Create New List (Don't Save)</button>
+                <button class="modal-btn btn-secondary" id="cancelNewList">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         class TodoApp {
             constructor() {
@@ -933,6 +949,7 @@
                 this.viewListsBtn = document.getElementById('viewListsBtn');
                 this.saveModal = document.getElementById('saveModal');
                 this.listsModal = document.getElementById('listsModal');
+                this.newListModal = document.getElementById('newListModal');
                 this.quickListsContainer = document.getElementById('quickListsContainer');
                 
                 this.init();
@@ -1000,10 +1017,17 @@
                 // Lists modal
                 document.getElementById('closeListsModal').addEventListener('click', () => this.hideListsModal());
                 
+                // New list modal
+                document.getElementById('closeNewListModal').addEventListener('click', () => this.hideNewListModal());
+                document.getElementById('saveAndCreateNew').addEventListener('click', () => this.saveAndCreateNew());
+                document.getElementById('createNewWithoutSaving').addEventListener('click', () => this.createNewWithoutSaving());
+                document.getElementById('cancelNewList').addEventListener('click', () => this.hideNewListModal());
+                
                 // Close modals when clicking outside
                 window.addEventListener('click', (e) => {
                     if (e.target === this.saveModal) this.hideSaveModal();
                     if (e.target === this.listsModal) this.hideListsModal();
+                    if (e.target === this.newListModal) this.hideNewListModal();
                 });
 
                 // Enter key in save input
@@ -1089,6 +1113,12 @@
                 this.hideSaveModal();
                 this.renderQuickLists();
                 alert(`List "${listName}" saved successfully!`);
+                
+                // If we need to create new list after saving
+                if (this.createNewAfterSave) {
+                    this.createNewAfterSave = false;
+                    this.performCreateNewList();
+                }
             }
 
             // View and manage saved lists
@@ -1160,18 +1190,51 @@
             // Create new list (clear current and reset name)
             createNewList() {
                 if (this.todos.length > 0) {
-                    if (confirm('Save current tasks before creating a new list?')) {
-                        this.showSaveModal();
-                        return;
-                    }
+                    // Show the 3-option modal
+                    this.showNewListModal();
+                    return;
                 }
 
+                // If no tasks, create new list immediately
+                this.performCreateNewList();
+            }
+
+            showNewListModal() {
+                this.newListModal.style.display = 'block';
+            }
+
+            hideNewListModal() {
+                this.newListModal.style.display = 'none';
+            }
+
+            saveAndCreateNew() {
+                this.hideNewListModal();
+                // Show save modal, and after saving, create new list
+                this.showSaveModalThenCreateNew();
+            }
+
+            createNewWithoutSaving() {
+                this.hideNewListModal();
+                this.performCreateNewList();
+            }
+
+            showSaveModalThenCreateNew() {
+                // Set a flag so we know to create new list after saving
+                this.createNewAfterSave = true;
+                this.showSaveModal();
+            }
+
+            performCreateNewList() {
+                // Clear current tasks and reset to default
                 this.todos = [];
                 this.currentListName = 'My Tasks';
                 this.currentListNameEl.textContent = 'My Tasks';
                 this.saveTodos();
                 this.renderQuickLists();
                 this.render();
+                
+                // Show confirmation
+                alert('New list created! Start adding tasks above.');
             }
 
             // Quick Lists Management
